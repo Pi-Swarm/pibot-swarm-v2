@@ -1,0 +1,89 @@
+[
+  {
+    "timestamp": "2026-02-22T21:12:27.241335",
+    "session_id": "e8d15ec4-fa5c-4f30-855b-5eca44c0f1b7",
+    "event_type": "mission_started",
+    "data": {
+      "name": "\u0641\u062d\u0635 \u0627\u0644\u0634\u0628\u0643\u0629 \u0627\u0644\u0645\u062d\u0644\u064a\u0629",
+      "target": "192.168.122.0/24"
+    }
+  },
+  {
+    "timestamp": "2026-02-22T21:12:27.241404",
+    "session_id": "e8d15ec4-fa5c-4f30-855b-5eca44c0f1b7",
+    "event_type": "message_sent",
+    "data": {
+      "from": "Planner",
+      "to": "Recon",
+      "type": "task",
+      "content": {
+        "mission_id": "1",
+        "tasks": [
+          {
+            "agent": "Recon",
+            "task": "scan_network",
+            "target": "192.168.122.0/24"
+          },
+          {
+            "agent": "Analyst",
+            "task": "assess_risk",
+            "target": "192.168.122.0/24"
+          }
+        ],
+        "coordinator": "Planner"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-02-22T21:12:27.241409",
+    "session_id": "e8d15ec4-fa5c-4f30-855b-5eca44c0f1b7",
+    "event_type": "message_sent",
+    "data": {
+      "from": "Planner",
+      "to": "Analyst",
+      "type": "task",
+      "content": {
+        "mission_id": "1",
+        "tasks": [
+          {
+            "agent": "Recon",
+            "task": "scan_network",
+            "target": "192.168.122.0/24"
+          },
+          {
+            "agent": "Analyst",
+            "task": "assess_risk",
+            "target": "192.168.122.0/24"
+          }
+        ],
+        "coordinator": "Planner"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-02-22T21:12:27.241412",
+    "session_id": "e8d15ec4-fa5c-4f30-855b-5eca44c0f1b7",
+    "event_type": "message_sent",
+    "data": {
+      "from": "Planner",
+      "to": "Reporter",
+      "type": "task",
+      "content": {
+        "mission_id": "1",
+        "tasks": [
+          {
+            "agent": "Recon",
+            "task": "scan_network",
+            "target": "192.168.122.0/24"
+          },
+          {
+            "agent": "Analyst",
+            "task": "assess_risk",
+            "target": "192.168.122.0/24"
+          }
+        ],
+        "coordinator": "Planner"
+      }
+    }
+  }
+]
