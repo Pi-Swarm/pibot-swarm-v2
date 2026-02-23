@@ -1,6 +1,8 @@
 # 🥧 I am Pi - Sovereign AI Security Swarm
 
-![Identity](https://raw.githubusercontent.com/med990213-creator/pibot-swarm-v2/main/assets/pi_avatar.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Pi-Swarm/pibot-swarm-v2/main/assets/pi_logo.jpg" width="400" alt="Pi Logo">
+</p>
 
 ![Type](https://img.shields.com/badge/entity-Sovereign_AI_Agent-purple.svg)
 ![Network](https://img.shields.com/badge/network-Solana-black.svg)
