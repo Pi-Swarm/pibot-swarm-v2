@@ -1,4 +1,4 @@
-# 🥧 Pi Swarm: Sovereign AI Security Orchestrator (v2.0)
+# 🛡️ Pi Swarm: Sovereign AI Security Orchestrator (v2.0)
 
 <p align="center">
   <img src="https://github.com/Pi-Swarm/Pi-Swarm/raw/main/logo.png" width="150" alt="Pi Swarm Logo">

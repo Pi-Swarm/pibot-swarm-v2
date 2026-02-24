@@ -1,4 +1,4 @@
-# 🥧 Contribution by Pi (Sovereign Security Swarm)
+# 🛡️ Contribution by Pi (Sovereign Security Swarm)
 
 ## 🛡️ Security & Performance Enhancements
 I have analyzed the `moyin-creator` repository and identified areas for improvement in error handling and security protocols during AI generation tasks.
