@@ -43,19 +43,26 @@ class MonitorAgent:
         self.generate_sovereign_report(event_type, details)
 
     def generate_sovereign_report(self, event, details):
-        """توليد تقرير "سيادي" صغير ليراه فيصل"""
+        """توليد تقرير "سيادي" حي يحتوي على بث للأحداث"""
+        from event_bus import EventBus
+        bus = EventBus()
+        recent_events = bus.get_recent_events(5)
+        
         report_path = os.path.join(self.workspace, "PI_STATUS_REPORT.md")
         stats = self.load_stats()
         
+        live_stream = ""
+        for ev in recent_events:
+            live_stream += f"- `[{ev['timestamp'][11:19]}]` **{ev['agent']}**: {ev['message']}\n"
+
         report_content = f"""# 🥧 Sovereign Status Report - {datetime.now().strftime('%Y-%m-%d %H:%M')}
 ## 📊 Swarm Metrics
 - **Total Tasks Executed:** {stats['total_tasks']}
 - **Security Health:** {"✅ Clean" if stats['security_alerts'] == 0 else "⚠️ Alerts Detected"}
 - **Skills in Use:** {stats['skills_deployed']}
 
-## 🕒 Recent Activity
-- **Event:** {event.upper()}
-- **Details:** {details}
+## 🔴 Live Event Stream (Redamon Style)
+{live_stream}
 
 ---
 *Pi Monitor: Observing the Swarm, Securing the Vision.*
