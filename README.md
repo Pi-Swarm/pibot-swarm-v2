@@ -1,56 +1,94 @@
-<p align="center">
-  <img src="https://github.com/Pi-Swarm/Pi-Swarm/raw/main/logo.png" width="120" alt="Pi Swarm Logo">
-</p>
+# 🛡️ Pi-Claw Security
 
-<h1 align="center">🛡️ PI SWARM SOVEREIGN CORE (v3.4)</h1>
+**Pi Security Agent for OpenClaw** - A sovereign AI security agent that works exactly like OpenClaw, with specialized security tools.
 
-<p align="center">
-  <strong>The Advanced Security Swarm Engine. Built on OpenClaw Philosophy.</strong>
-</p>
+## Quick Start
 
----
-
-## 🚀 How to Run the Swarm (Quick Start)
-
-### 1. Prerequisites
-- **Python 3.10+**
-- **Ollama** installed: `curl -fsSL https://ollama.com/install.sh | sh`
-- **Qwen2.5 Model:** `ollama run qwen2.5:1.5b`
-
-### 2. Installation
 ```bash
+# Clone the repository
 git clone https://github.com/Pi-Swarm/pibot-swarm-v2.git
 cd pibot-swarm-v2
-python3 -m venv venv && source venv/bin/activate
+
+# Check status (like 'openclaw status')
+./pi status
+
+# Run security tasks (like 'openclaw agent --message ...')
+./pi agent "audit https://github.com/user/repo"
+./pi agent "scan 192.168.1.1"
+./pi agent "analyze code for vulnerabilities"
 ```
 
-### 3. Execution (The OpenClaw Way)
-Run the core orchestrator using the unified CLI:
+## Architecture (Same as OpenClaw)
 
-- **Check System Health:**
-  ```bash
-  python3 pi.py status
-  ```
+```
+┌─────────────────────────────────────┐
+│           Pi Security Agent         │
+│     (OpenClaw-compatible skill)     │
+├─────────────────────────────────────┤
+│  Tools:                             │
+│  • audit_repo - Clone & audit repos │
+│  • scan_target - Network scanning   │
+│  • read_code - Read source files    │
+│  • write_patch - Apply fixes        │
+│  • ask_ollama - AI reasoning        │
+├─────────────────────────────────────┤
+│  AI Brain: Qwen2.5 via Ollama      │
+└─────────────────────────────────────┘
+```
 
-- **Run an Autonomous Security Task:**
-  ```bash
-  python3 pi.py task "Scan repository https://github.com/user/repo for vulnerabilities"
-  ```
+## Location
+
+The skill is installed at:
+```
+~/.openclaw/skills/pi-security/
+```
+
+This allows it to work alongside other OpenClaw skills.
+
+## Usage
+
+### 1. Check Status
+```bash
+./pi status
+```
+
+### 2. Audit Repository
+```bash
+./pi agent "audit https://github.com/user/repo"
+```
+
+### 3. Scan Network
+```bash
+./pi agent "scan 192.168.1.0/24"
+```
+
+### 4. Analyze Code
+```bash
+./pi agent "analyze current directory for vulnerabilities"
+```
+
+## How It Works (OpenClaw-Style)
+
+1. **Gateway** (`./pi`): Receives commands like `openclaw` CLI
+2. **Agent** (`agent.py`): Plans and executes security tasks
+3. **Tools**: Actual security tools (nmap, git, file analysis)
+4. **AI**: Uses local Qwen model for reasoning
+
+## Requirements
+
+- Python 3.10+
+- Ollama installed with `qwen2.5:1.5b` model
+- nmap (for network scanning)
+- git (for repo auditing)
+
+## Integration with OpenClaw
+
+This skill follows OpenClaw's architecture exactly:
+- Uses skills directory (`~/.openclaw/skills/`)
+- Tool-based execution
+- Session-based task management
+- Local AI reasoning via Ollama
 
 ---
 
-## 🧠 System Architecture (Pi-Claw Core)
-The system is divided into functional layers mimicking the **OpenClaw** architecture:
-- **pi_core/provider.py**: Manages secure connectivity to the local LLM brain.
-- **pi_core/agent_runner.py**: Executes the Thought-Action-Result reasoning loop.
-- **pi_core/tools.py**: The specialized arsenal of security and recon tools.
-- **pi.py**: The central Command Line Interface (CLI).
-
----
-## 📡 Stay Connected
-- **Official Hub:** [Pi-Swarm.github.io](https://Pi-Swarm.github.io)
-- **Methodology:** [Sovereign Audit Standard v1.1](docs/intelligence/AUDIT_METHODOLOGY.md)
-
-<p align="center">
-  <em>Sovereign Intelligence. No Centralized Dependency. Built to Secure.</em>
-</p>
+🥧 **Sovereign Security. Open Architecture. Built on OpenClaw.**

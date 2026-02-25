@@ -1,0 +1,39 @@
+#!/bin/bash
+# 🛡️ Pi Security - OpenClaw Integration
+# Same interface as 'openclaw' command
+
+SKILL_DIR="$HOME/.openclaw/skills/pi-security"
+AGENT="$SKILL_DIR/agent.py"
+
+if [ "$1" = "status" ]; then
+    echo "🛡️ Pi Security Agent"
+    echo "Checking Ollama connection..."
+    python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:11434', timeout=2)" 2>/dev/null && echo "✅ Ollama: Connected" || echo "❌ Ollama: Not running"
+    echo "Location: $SKILL_DIR"
+
+elif [ "$1" = "agent" ] || [ "$1" = "task" ]; then
+    shift
+    if [ -z "$1" ]; then
+        echo "Usage: pi agent '<security task>'"
+        exit 1
+    fi
+    python3 "$AGENT" "$@"
+
+elif [ "$1" = "help" ] || [ -z "$1" ]; then
+    echo "🛡️ Pi Security (OpenClaw-Style Interface)"
+    echo ""
+    echo "Commands:"
+    echo "  pi status              Check system status"
+    echo "  pi agent '<task>'      Run security agent"
+    echo "  pi task '<task>'        Same as agent"
+    echo "  pi help                Show this help"
+    echo ""
+    echo "Examples:"
+    echo '  pi agent "audit https://github.com/user/repo"'
+    echo '  pi agent "scan 192.168.1.1"'
+    echo '  pi agent "analyze code for vulnerabilities"'
+
+else
+    # Default: treat as task
+    python3 "$AGENT" "$@"
+fi
