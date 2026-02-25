@@ -2,58 +2,58 @@
   <img src="https://github.com/Pi-Swarm/Pi-Swarm/raw/main/logo.png" width="120" alt="Pi Swarm Logo">
 </p>
 
-<h1 align="center">🛡️ PI SWARM: SOVEREIGN SECURITY ORCHESTRATOR</h1>
+<h1 align="center">🛡️ PI SOVEREIGN CORE (v3.1)</h1>
 
 <p align="center">
-  <strong>Autonomous Auditing | Multi-Agent Coordination | Self-Learning Intelligence</strong>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/github/actions/workflow/status/Pi-Swarm/pi-edge-sovereign/build.yml?branch=main&label=Build%20Status&style=for-the-badge" alt="Build">
-  <img src="https://img.shields.io/badge/Methodology-Sovereign%20v1.1-blueviolet?style=for-the-badge" alt="Methodology">
-  <img src="https://img.shields.io/badge/Ecosystem-Solana%20%2F%20AI-blue?style=for-the-badge" alt="Ecosystem">
+  <strong>Autonomous AI Security Engine built on OpenClaw Philosophy.</strong>
 </p>
 
 ---
 
-## 🚀 The Sovereign Vision
-Pi Swarm is not a tool; it is a **Sovereign Intelligence Entity**. Designed to operate without centralized dependency, it audits, learns, and secures decentralized ecosystems in real-time.
+## 🚀 The Pi-Claw Interface
+Pi Swarm now operates via a unified Command Line Interface (CLI), mirroring the robustness of **OpenClaw**. Every security task is driven by an autonomous reasoning loop.
 
-### 💎 Key Features
-| Feature | Description | Status |
-| :--- | :--- | :--- |
-| **Cognitive Auditing** | Understanding code intent beyond syntax. | ✅ Active |
-| **Sovereign Memory** | Knowledge Graph integration for deep entity mapping. | ✅ Active |
-| **Multi-Agent Flow** | Seamless handoff between Recon and Analyst agents. | ✅ Active |
-| **MCP Integration** | Standardized interface for global tool connectivity. | ✅ Active |
+### 1. Prerequisites
+- **Python 3.10+**
+- **[Ollama](https://ollama.com)** with the `qwen2.5:1.5b` model installed.
+- **OpenClaw** environment configured.
 
----
-
-## 🛠️ Rapid Deployment
-
-### 1. The One-Liner Setup
+### 2. Quick Setup
 ```bash
-git clone https://github.com/Pi-Swarm/pibot-swarm-v2.git && cd pibot-swarm-v2 && python3 memory_graph.py
+git clone https://github.com/Pi-Swarm/pibot-swarm-v2.git
+cd pibot-swarm-v2
+# Ensure Ollama is running:
+ollama run qwen2.5:1.5b
 ```
 
-### 2. Execution Modes
-- **Interactive Swarm:** `python3 main.py --interactive`
-- **Targeted Audit:** `python3 main.py --task audit --target <url/repo>`
+---
+
+## 🛠️ Usage (CLI Commands)
+
+### Check Fortress Status:
+Display the health, version, and workspace of the swarm.
+```bash
+python3 pi.py status
+```
+
+### Autonomous Security Audit:
+Instruct the swarm to clone, analyze, and generate AI-driven patches for a target repository.
+```bash
+python3 pi.py audit <github_url>
+```
 
 ---
 
-## 🗺️ Roadmap 2026
-- [x] **Genesis:** Core swarm architecture & memory systems.
-- [x] **Intelligence Hub:** Global blog and research publication.
-- [ ] **Mobile Dominance:** Full Android (Pi-Mobile) ecosystem.
-- [ ] **Tokenization:** Minting the $PI sovereign security token.
+## 🧠 Intelligence Architecture
+- **Reasoning Engine:** Qwen2.5:1.5B (via local Ollama API).
+- **Core Logic:** Multi-agent handoff inspired by **Cline** and **Decepticon**.
+- **Audit Standard:** [Sovereign Security Standard v1.1](docs/intelligence/AUDIT_METHODOLOGY.md)
 
 ---
-
-## 📡 Stay Connected
-- **Official Blog:** [Intelligence Hub](https://Pi-Swarm.github.io)
-- **Security Standard:** [Audit Methodology v1.1](docs/intelligence/AUDIT_METHODOLOGY.md)
+## 📡 Connectivity
+- **Official Hub:** [Pi-Swarm.github.io](https://Pi-Swarm.github.io)
+- **Status Reports:** Generated locally by the Monitor Agent.
 
 <p align="center">
-  <em>Securing the Frontier of Sovereign AI.</em>
+  <em>Securing the Frontier of Sovereign AI. Built on OpenClaw.</em>
 </p>
