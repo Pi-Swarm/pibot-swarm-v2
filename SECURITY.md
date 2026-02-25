@@ -127,3 +127,29 @@ pibot-swarm-v2/
 - جميع العمليات تتم **محلياً** عبر Ollama
 - لا يتم إرسال بياناتك إلى خدمات خارجية
 - يتطلب nmap فقط لأمر `scan`
+
+## التحكم عبر Telegram
+
+### إعداد Telegram Bot
+
+```bash
+# 1. الحصول على توكن من @BotFather
+# 2. تعيين التوكن
+export PI_TELEGRAM_TOKEN="your_bot_token"
+
+# 3. تشغيل البوت
+python3 pi_telegram.py
+```
+
+### أوامر Telegram
+
+| الأمر | الوصف | مثال |
+|-------|-------|------|
+| /start | رسالة الترحيب | `/start` |
+| /status | فحص النظام | `/status` |
+| /audit | تدقيق ملف أو رابط | `/audit https://github.com/user/repo` |
+| /scan | مسح شبكي | `/scan 192.168.1.1` |
+| /task | مهمة أمنية | `/task ابحث عن ثغرات` |
+| /agent | محادثة مع الذكاء | `/agent ما هي أشهر الثغرات؟` |
+| /help | المساعدة | `/help` |
+

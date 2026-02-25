@@ -1,33 +1,27 @@
-"""
-🥧 Pi-Claw Provider Layer
-Mirrors OpenClaw's approach to LLM connectivity.
-"""
-
+"""AI Provider Module"""
 import json
 import urllib.request
 
 class PiClawProvider:
     def __init__(self, model="qwen2.5:1.5b"):
         self.model = model
-        self.base_url = "http://localhost:11434/api/chat"
-
-    def chat(self, messages):
-        """
-        يرسل المحادثة بالكامل (System, User, Assistant) كما يفعل OpenClaw.
-        """
-        payload = {
-            "model": self.model,
-            "messages": messages,
-            "stream": False
-        }
+        self.url = "http://localhost:11434/api/generate"
+    
+    def ask_ai(self, prompt, context=""):
+        full = f"{context}\n{prompt}" if context else prompt
         try:
-            req = urllib.request.Request(self.base_url, data=json.dumps(payload).encode(), method="POST")
-            with urllib.request.urlopen(req) as res:
-                response_data = json.loads(res.read().decode())
-                return response_data['message']['content']
+            data = json.dumps({
+                "model": self.model,
+                "prompt": full,
+                "stream": False
+            }).encode()
+            req = urllib.request.Request(
+                self.url, data=data,
+                headers={"Content-Type": "application/json"},
+                method="POST"
+            )
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                result = json.loads(resp.read().decode())
+                return result.get("response", "No response")
         except Exception as e:
-            return f"Provider Error: {e}"
-
-if __name__ == "__main__":
-    p = PiClawProvider()
-    print(p.chat([{"role": "user", "content": "Hello, identify yourself."}]))
+            return f"Error: {e}"
