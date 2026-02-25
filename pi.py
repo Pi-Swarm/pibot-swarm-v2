@@ -1,192 +1,206 @@
 #!/usr/bin/env python3
 """
-🛡️ Pi-Claw - Sovereign AI Security Swarm
-Built on OpenClaw philosophy: Gateway + Sessions + Tools + AI Reasoning
+🛡️ Pi-Claw - Enhanced OpenClaw for Security Operations
+Architecture: OpenClaw Gateway + Pi Swarm Security Tools
 """
 
 import sys
 import os
 import json
 import urllib.request
-import subprocess
 from pathlib import Path
 
-# Configuration
+# Configuration - Same as OpenClaw style
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL = "qwen2.5:1.5b"
-WORKSPACE = Path.home() / ".openclaw/workspace/pibot"
+WORKSPACE = str(Path.home() / ".openclaw/workspace/pibot")
 
-class PiGateway:
-    """The central gateway - like OpenClaw's control plane"""
+class PiSwarmTools:
+    """Security tools that OpenClaw security agent can call"""
+    
+    def scan_target(self, target: str):
+        """Network reconnaissance tool"""
+        import subprocess
+        result = subprocess.run(["nmap", "-sV", target], capture_output=True, text=True)
+        return result.stdout[:2000] if result.returncode == 0 else f"Error: {result.stderr}"
+    
+    def audit_repo(self, repo_url: str):
+        """Clone and audit a repository"""
+        import subprocess
+        import tempfile
+        
+        tmpdir = tempfile.mkdtemp()
+        subprocess.run(["git", "clone", "--depth", "1", repo_url, tmpdir], capture_output=True)
+        
+        # Find code files
+        files = []
+        for ext in ["*.rs", "*.py", "*.js", "*.ts", "*.sol"]:
+            files.extend(Path(tmpdir).rglob(ext))
+        
+        return {
+            "repo": repo_url,
+            "files_found": len(files),
+            "sample_files": [str(f.relative_to(tmpdir)) for f in files[:5]]
+        }
+    
+    def read_code(self, filepath: str, max_chars=4000):
+        """Read code file for analysis"""
+        try:
+            with open(filepath, 'r', errors='ignore') as f:
+                return f.read(max_chars)
+        except Exception as e:
+            return f"Error reading {filepath}: {e}"
+    
+    def write_patch(self, filepath: str, content: str):
+        """Write security patch to file"""
+        try:
+            with open(filepath, 'w') as f:
+                f.write(content)
+            return f"Patch written to {filepath}"
+        except Exception as e:
+            return f"Error: {e}"
+
+class OpenClawGateway:
+    """
+    OpenClaw-style Gateway with Pi Swarm security specialization
+    Handles: status, audit, scan, task, agent commands
+    """
     
     def __init__(self):
-        self.session_id = 0
-        self.sessions = {}
+        self.tools = PiSwarmTools()
     
-    def run(self, command: str, args: list = None):
-        """Main entry point - processes commands"""
-        args = args or []
+    def ask_ai(self, prompt: str, context="") -> str:
+        """Connect to Ollama - the brain"""
+        full_prompt = f"{context}\n\n{prompt}" if context else prompt
         
-        if command == "status":
-            return self._cmd_status()
-        elif command == "audit":
-            target = args[0] if args else "."
-            return self._cmd_audit(target)
-        elif command == "task":
-            description = " ".join(args) if args else "No task"
-            return self._cmd_task(description)
-        elif command == "agent":
-            message = " ".join(args) if args else "Hello"
-            return self._cmd_agent(message)
-        else:
-            return self._show_help()
-    
-    def _show_help(self):
-        return """🛡️ Pi-Claw Commands (OpenClaw-Style):
-  pi status          - Check system and Ollama
-  pi audit <target>  - Security audit of file/directory
-  pi task <desc>     - Run autonomous security task
-  pi agent <msg>     - Talk to the AI agent
-"""
-    
-    def _cmd_status(self):
-        """Check if Ollama is running - REAL check"""
-        try:
-            # Test Ollama connection
-            test = self._ask_ollama("Say 'ready'")
-            if "ready" in test.lower():
-                return "🛡️ Pi-Claw Gateway: ONLINE\n🤖 AI Brain (Qwen): CONNECTED\n"
-            else:
-                return "⚠️ Ollama responding but model not loaded"
-        except Exception as e:
-            return f"❌ Ollama not available: {e}"
-    
-    def _cmd_audit(self, target: str):
-        """Audit a file or directory - REAL implementation"""
-        path = Path(target)
-        
-        if not path.exists():
-            return f"❌ Path not found: {target}"
-        
-        if path.is_file():
-            return self._audit_file(path)
-        elif path.is_dir():
-            return self._audit_directory(path)
-        else:
-            return "❌ Unknown path type"
-    
-    def _audit_file(self, filepath: Path):
-        """Analyze a single file with AI"""
-        print(f"🔍 Auditing: {filepath}")
-        
-        try:
-            content = filepath.read_text(errors='ignore')[:4000]
-        except Exception as e:
-            return f"❌ Cannot read file: {e}"
-        
-        prompt = f"""Analyze this code for security vulnerabilities. Be specific.
-File: {filepath.name}
-
-CODE:
-{content}
-
-Identify:
-1. Critical vulnerabilities (RCE, injection, auth bypass)
-2. Logic flaws
-3. Missing validation
-4. Suggested fixes"""
-        
-        return self._ask_ollama(prompt)
-    
-    def _audit_directory(self, dirpath: Path):
-        """List and analyze directory contents"""
-        files = list(dirpath.iterdir())[:10]  # Limit to first 10
-        file_list = "\n".join([f"  - {f.name}" for f in files])
-        
-        prompt = f"""Directory audit of: {dirpath}
-Files found:
-{file_list}
-
-Suggest which files to audit for security issues and why."""
-        
-        return self._ask_ollama(prompt)
-    
-    def _cmd_task(self, description: str):
-        """Run autonomous task - AI decides what to do"""
-        print(f"🚀 Task: {description}")
-        
-        # Let AI decide the approach
-        prompt = f"""You are a security automation agent.
-Task: {description}
-
-Current directory: {os.getcwd()}
-Available tools: file_read, exec_command, write_file
-
-Plan your approach step by step, then execute.
-What will you do first?"""
-        
-        plan = self._ask_ollama(prompt)
-        print(f"\n🧠 Plan: {plan}\n")
-        
-        # Execute based on plan
-        if "file" in plan.lower() or "read" in plan.lower():
-            # Look for files
-            files = os.listdir('.')[:5]
-            return f"Found files: {files}"
-        
-        return plan
-    
-    def _cmd_agent(self, message: str):
-        """Direct conversation with AI agent"""
-        system = """You are Pi Swarm, a sovereign AI security assistant.
-You help with:
-- Code security audits
-- Vulnerability research  
-- Security automation
-Be concise and technical."""
-        
-        prompt = f"{system}\n\nUser: {message}\n\nPi:"
-        return self._ask_ollama(prompt)
-    
-    def _ask_ollama(self, prompt: str) -> str:
-        """REAL call to Ollama - no simulation"""
         try:
             data = json.dumps({
                 "model": MODEL,
-                "prompt": prompt,
-                "stream": False,
-                "options": {"temperature": 0.7}
+                "prompt": full_prompt,
+                "stream": False
             }).encode()
             
             req = urllib.request.Request(
-                OLLAMA_URL,
-                data=data,
+                OLLAMA_URL, data=data,
                 headers={"Content-Type": "application/json"},
                 method="POST"
             )
             
             with urllib.request.urlopen(req, timeout=120) as resp:
                 result = json.loads(resp.read().decode())
-                return result.get("response", "No response")
-                
+                return result.get("response", "")
         except Exception as e:
-            return f"Error: {e}"
+            return f"AI Error: {e}"
+    
+    def run(self, command: str, args: list = None):
+        """Route commands like OpenClaw does"""
+        args = args or []
+        
+        if command == "status":
+            return self._cmd_status()
+        elif command == "audit" and args:
+            return self._cmd_audit(args[0])
+        elif command == "scan" and args:
+            return self._cmd_scan(args[0])
+        elif command == "task" and args:
+            return self._cmd_task(" ".join(args))
+        elif command == "agent" and args:
+            return self._cmd_agent(" ".join(args))
+        elif command == "help":
+            return self._show_help()
+        else:
+            return "Unknown command. Use: pi help"
+    
+    def _cmd_status(self):
+        """Check system status like 'openclaw status'"""
+        try:
+            test = self.ask_ai("Say 'Pi Swarm online'")
+            online = "online" in test.lower()
+        except:
+            online = False
+        
+        return f"""🛡️ Pi-Claw Gateway (Enhanced OpenClaw)
+├─ AI Core: {'🟢 Qwen Connected' if online else '🔴 Disconnected'}
+├─ Security Tools: 🟢 Loaded
+│  ├─ scan_target
+│  ├─ audit_repo
+│  ├─ read_code
+│  └─ write_patch
+└─ Workspace: {WORKSPACE}
+"""
+    
+    def _cmd_audit(self, target: str):
+        """Security audit - Pi Swarm specialization"""
+        print(f"🔍 Auditing: {target}")
+        
+        if target.startswith("http"):
+            # Repo audit
+            info = self.tools.audit_repo(target)
+            context = f"Analyzing repo: {info['repo']}\nFiles: {info['files_found']}\nSample: {info['sample_files']}"
+        else:
+            # File/directory audit
+            code = self.tools.read_code(target)
+            context = f"Analyzing code:\n{code[:2000]}"
+        
+        prompt = f"Security audit report:\n{context}\n\nIdentify vulnerabilities and suggest fixes:"
+        return self.ask_ai(prompt, "You are a security auditor.")
+    
+    def _cmd_scan(self, target: str):
+        """Network scan with AI analysis"""
+        print(f"📡 Scanning: {target}...")
+        scan_result = self.tools.scan_target(target)
+        
+        prompt = f"Nmap scan results:\n{scan_result}\n\nAnalyze for security risks:"
+        return self.ask_ai(prompt, "You are a network security analyst.")
+    
+    def _cmd_task(self, description: str):
+        """Autonomous task like 'openclaw agent --task ...'"""
+        print(f"🚀 Task: {description}")
+        print("🧠 Planning...")
+        
+        plan = self.ask_ai(
+            f"Task: {description}\nPlan step by step how to complete this using security tools.",
+            "You are Pi Swarm, an autonomous security agent."
+        )
+        
+        return f"Plan:\n{plan}\n\n[Use 'pi audit' or 'pi scan' to execute]"
+    
+    def _cmd_agent(self, message: str):
+        """Direct AI conversation like 'openclaw agent --message ...'"""
+        return self.ask_ai(
+            message,
+            "You are Pi Swarm, a sovereign AI security assistant. Built on OpenClaw architecture."
+        )
+    
+    def _show_help(self):
+        return """🛡️ Pi-Claw - Enhanced OpenClaw for Security
+
+Usage: pi <command> [args]
+
+Commands:
+  status              Check AI connection and tools
+  audit <target>      Audit file/repo (file path or GitHub URL)
+  scan <target>       Network scan + AI analysis
+  task <description>  Plan autonomous security task
+  agent <message>     Direct chat with security AI
+  help                Show this help
+
+Examples:
+  pi status
+  pi audit ./smart_contract.sol
+  pi audit https://github.com/user/repo
+  pi scan 192.168.1.1
+  pi task "Find reentrancy vulnerabilities in current directory"
+"""
 
 def main():
-    """CLI entry point - OpenClaw style"""
     if len(sys.argv) < 2:
-        print("🛡️ Pi-Claw Gateway - Usage:")
-        print("  python3 pi_claw.py <command> [args...]")
-        print()
-        gateway = PiGateway()
-        print(gateway._show_help())
+        print("Pi-Claw Gateway")
+        print("Run: pi help")
         return
     
-    command = sys.argv[1]
-    args = sys.argv[2:]
-    
-    gateway = PiGateway()
-    result = gateway.run(command, args)
+    gateway = OpenClawGateway()
+    result = gateway.run(sys.argv[1], sys.argv[2:])
     print(result)
 
 if __name__ == "__main__":
