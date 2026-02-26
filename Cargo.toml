@@ -14,8 +14,8 @@ path = "src/main.rs"
 # Async runtime - core like OpenClaw's event loop
 tokio = { version = "1.35", features = ["full"] }
 
-# HTTP client - for Ollama and Telegram APIs
-reqwest = { version = "0.11", features = ["json"] }
+# HTTP client - for Ollama and Telegram APIs (rustls = no OpenSSL system dependency)
+reqwest = { version = "0.11", features = ["json", "rustls-tls"], default-features = false }
 
 # JSON handling
 serde = { version = "1.0", features = ["derive"] }
@@ -31,11 +31,11 @@ config = "0.14"
 tracing = "0.1"
 tracing-subscriber = "0.3"
 
-# Process execution (for tools)
-tokio-command-fds = "0.2"
+# Process execution (for tools) - disabled for compatibility
+# tokio-command-fds = "0.2"
 
-# File watching (for workspace monitoring)
-notify = "6.1"
+# File watching (for workspace monitoring) - pinned version for compatibility
+notify = "8.0.0"
 
 # Time/date handling
 chrono = { version = "0.4", features = ["serde"] }
